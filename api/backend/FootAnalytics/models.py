@@ -8,5 +8,7 @@ class FootGraph(models.Model):
     position = models.CharField(max_length=120)
 
     def _str_(self):
-        return self.league
+        return self.per
+    
+
  
