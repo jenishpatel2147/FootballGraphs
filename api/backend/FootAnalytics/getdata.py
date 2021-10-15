@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import os
 import mpld3
+import json
 os.environ['KMP_DUPLICATE_LIB_OK']='True'
 
 fbrefadderURL = 'http://fbref.com'
@@ -163,4 +164,7 @@ def generateviz():
     tooltip = mpld3.plugins.PointLabelTooltip(scatterplot, labels=labels)
     mpld3.plugins.connect(fig, tooltip)
 
-    mpld3.fig_to_html(fig)
+    #jsonfiles = json.dumps(mpld3.fig_to_dict(fig))
+    jsonfiles = mpld3.fig_to_html(fig)
+
+    return jsonfiles

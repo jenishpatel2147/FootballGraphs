@@ -1,14 +1,16 @@
 # import Http Response from django
+from datetime import time
 from django.http import HttpResponse
 from .getdata import generateviz
 import multiprocessing as mp
+import time
 
 
 # Create your views here.
 def footy(request):
-    viz = mp.Process(target=generateviz(), args=())
-    viz.start()
-    print(viz)
+    print(request)
+
+    viz = generateviz()
     return HttpResponse(viz)
 
 # Create your views here.
