@@ -10,6 +10,15 @@ os.environ['KMP_DUPLICATE_LIB_OK']='True'
 
 fbrefadderURL = 'http://fbref.com'
 
+'''
+def try_and_except():
+    try:
+
+    except:
+
+    return data
+'''
+
 def ScrapBig5Page(url):
     page = requests.get(url).text
     soup = BeautifulSoup(page, "lxml")
@@ -39,9 +48,9 @@ def ScrapBig5Page(url):
                     data.get(col).append(td.contents[0])
    
     df = pd.DataFrame(data)      # Convert to DataFrame
-    df = df.groupby(df.country)  # Group Data by Country
+    groupedCountries = df.groupby(df.country)  # Group Data by Country
     # Assign Each Country with specific Data
-    italy,france,germany,spain,england = df.get_group('it'), df.get_group('fr'), df.get_group('de'), df.get_group('es'), df.get_group('eng') 
+    italy,france,germany,spain,england = groupedCountries.get_group('it'), groupedCountries.get_group('fr'), groupedCountries.get_group('de'), groupedCountries.get_group('es'), groupedCountries.get_group('eng') 
     return italy,france,germany,spain,england,df
 
 def ScrapTeamPage(url, players):
@@ -62,8 +71,18 @@ def ScrapTeamPage(url, players):
         
     for tr in looper:
         if players:
-            data.get("playerLink").append(tr.a.get("href"))
-            data.get("playerName").append(tr.th.a.contents[0])
+            try:
+                link = tr.a.get("href")
+            except:
+                link = "None"
+            try:
+                playerName = tr.th.a.contents[0]
+            except:
+                playerName = "None"
+
+            data.get("playerLink").append(link)
+            data.get("playerName").append(playerName)
+
         else:
             data.get("team_type").append(str(tr.th.contents[0]))
             
@@ -74,7 +93,11 @@ def ScrapTeamPage(url, players):
             
             if players:
                 if col == "nationality":
-                    data.get(col).append(td.span.contents[1].strip())
+                    try:
+                        nationality = td.span.contents[1].strip()
+                    except:
+                        nationality = "Could Not Find Nationality"
+                    data.get(col).append(nationality)
                 elif col == "matches":
                     data.get(col).append("")
                 elif len(td.contents) > 0:
@@ -98,10 +121,10 @@ def ScrapTeamPage(url, players):
     return df   
 
 
-def per90sdiff(df, value): # 
+def per90sdiff(df, value=5): # 
     filtered_df = df.loc[df['minutes_90s'] >= str(value)] 
     return filtered_df
-
+    
 
 def getSpecificPositon(df, pos): #FW,AM,RW,LW
     # pos = "att", "mid", "full", "def", "wing"
@@ -120,22 +143,64 @@ def getSpecificPositon(df, pos): #FW,AM,RW,LW
     return filtered_df
 
 
-def generateviz():
+def getdata():
     big5url = "https://fbref.com/en/comps/Big5/Big-5-European-Leagues-Stats"
 
     italy,france,germany,spain,england,ALL = ScrapBig5Page(big5url)
-    players = pd.DataFrame()
-    iters = 0 
-    for index,row in england.iterrows():
-        teamURL = row['squad'][2]
-        temp = ScrapTeamPage(teamURL, True)
-        players = pd.concat([temp,players], axis=0)
-        iters +=1
-        if iters % 5 == 0:
-            print("Finished "+ str(iters) + " teams")
 
-    per90sPlayers = per90sdiff(players, 5)
-    players = getSpecificPositon(per90sPlayers, "att")
+    countries = [italy, france, spain, england, germany]
+    fileNames = ["italy", "france", "spain", "england", "germany"]
+
+    for i in range(0, len(countries)):
+        players = pd.DataFrame()
+        iters = 0 
+        league = countries[i]
+        name = fileNames[i]
+        
+        for index,row in league.iterrows():
+            teamURL = row['squad'][2]
+            temp = ScrapTeamPage(teamURL, True)
+            players = pd.concat([temp,players], axis=0)
+            iters +=1
+            if iters % 5 == 0:
+                print("Finished "+ str(iters) + " teams")
+
+        d = [ 
+            dict([
+                (colname, row[i])
+                for i,colname in enumerate(players.columns)
+            ])
+            for row in players.values
+        ]
+
+        jsonData = json.dumps(d, indent=4)
+
+        fileName = './' + name + '_players.json'
+        with open(fileName, 'w') as outputFile:
+            print(jsonData, file=outputFile)
+
+
+
+def readData(team):
+    fileName = './' + team + '_players.json'
+    with open(fileName, 'r') as myfile:
+        data=myfile.read()
+
+    # parse file
+    obj=json.loads(data)
+
+    # convert to DataFrame
+    df=pd.DataFrame.from_dict(obj,orient='columns')
+
+    return df
+
+
+def generateviz(team="england", per = 5, position = "att"):
+    players = readData(team)
+    print(players)
+
+    per90sPlayers = per90sdiff(players, per)
+    players = getSpecificPositon(per90sPlayers, position)
 
     fig, ax = plt.subplots()
 
@@ -147,9 +212,6 @@ def generateviz():
     ax.set_xlabel('NP Expected Goals', size=20)
     ax.set_ylabel('Expected Assists', size=20)
     ax.set_title('NP Expected Goals vs Expected Assists - data by FBref', size=20)
-
-    #plt.xscale('log') -- Perhaps Nerd Mode
-    #plt.yscale('log') -- Perhaps Nerd Mode
 
     plt.style.use('grayscale')  # to get seaborn scatter plot
 
