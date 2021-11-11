@@ -1,6 +1,6 @@
 import React from "react";
 import { Redirect, Route, Switch } from "react-router-dom";
-import Dashboard from "../Plots/dashboard";
+import Dashboard from "../Plots/dashboard.js";
 
 export default function Routes() {
 	return (

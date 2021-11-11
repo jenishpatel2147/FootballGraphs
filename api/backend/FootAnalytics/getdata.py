@@ -197,7 +197,7 @@ def readData(team):
 
 def generateviz(team="england", per = 5, position = "att"):
     players = readData(team)
-    print(players)
+    #print(players)
 
     per90sPlayers = per90sdiff(players, per)
     players = getSpecificPositon(per90sPlayers, position)

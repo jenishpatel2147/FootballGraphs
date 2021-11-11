@@ -4,16 +4,22 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from "react-router-dom";
+import { configureStore } from '@reduxjs/toolkit';
 import { Provider } from "react-redux";
-import { createStore } from 'redux';
-import roots from './components/Fields/states';
+import ScatterReducer from "./features/ScatterReducer.js";
 
-const state_reducer = createStore(roots);
+const store = configureStore({
+  reducer: {
+    scatterplot: ScatterReducer
+  }
+});
 
 ReactDOM.render(
   <BrowserRouter>
     <React.StrictMode>
-        <App />
+        <Provider store={store}>
+          <App />
+        </Provider>
     </React.StrictMode>
   </BrowserRouter>,
   document.getElementById('root')
