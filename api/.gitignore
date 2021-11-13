@@ -3,6 +3,5 @@
 # dependencies
 /backend/backend/__pycache__
 /backend/env
-/backend/FootAnalytics/__pycache__
 /backend/FootAnalytics/migrations/__pycache__
 /env
