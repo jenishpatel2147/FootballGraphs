@@ -52,7 +52,7 @@ def ScrapBig5Page(url):
     italy,france,germany,spain,england = groupedCountries.get_group('it'), groupedCountries.get_group('fr'), groupedCountries.get_group('de'), groupedCountries.get_group('es'), groupedCountries.get_group('eng') 
     return italy,france,germany,spain,england,df
 
-def ScrapTeamPage(url, players):
+def ScrapTeamPage(url, players, country):
     # Url - Team Url, 
     # players - True if you want total for all players 
     # players - False if you want simply opponent and squad total
@@ -65,12 +65,14 @@ def ScrapTeamPage(url, players):
         "xg", "npxg", "xa", "npxg_xa", "xg_per90", "xa_per90", "xg_xa_per90", "npxg_per90", "npxg_xa_per90"]
 
     team_name = (url.split('-Stats')[0]).split('/')[-1]
+    github_url =  "https://github.com/jenishpatel2147/FootballGraphs/blob/main/logos/" + country + "/" + team_name + ".png"
 
     if players: 
         looper = table.tbody.find_all("tr")
         data = dict({"playerLink": [],
                     "playerName": [],
-                    "team": team_name})
+                    "team": team_name,
+                    "url": github_url})
     else:
         looper = table.tfoot.find_all("tr")
         data = dict({"team_type": []})
@@ -165,7 +167,7 @@ def getdata():
         
         for index,row in league.iterrows():
             teamURL = row['squad'][2]
-            temp = ScrapTeamPage(teamURL, True)
+            temp = ScrapTeamPage(teamURL, True, name)
             players = pd.concat([temp,players], axis=0)
             iters +=1
             if iters % 5 == 0:

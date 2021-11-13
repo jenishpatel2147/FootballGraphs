@@ -35,47 +35,6 @@ def getSpecificPositon(df, pos): #FW,AM,RW,LW
     return filtered_df
 
 
-def getdata():
-    big5url = "https://fbref.com/en/comps/Big5/Big-5-European-Leagues-Stats"
-
-    italy,france,germany,spain,england,ALL = ScrapBig5Page(big5url)
-
-    countries = [italy, france, spain, england, germany]
-    fileNames = ["italy", "france", "spain", "england", "germany"]
-
-    for i in range(0, len(countries)):
-        print("Starting - " + str(fileNames[i]))
-        players = pd.DataFrame()
-        iters = 0 
-        league = countries[i]
-        name = fileNames[i]
-        
-        for index,row in league.iterrows():
-            teamURL = row['squad'][2]
-            temp = ScrapTeamPage(teamURL, True)
-            players = pd.concat([temp,players], axis=0)
-            iters +=1
-            if iters % 5 == 0:
-                print("Finished "+ str(iters) + " teams")
-
-        d = [ 
-            dict([
-                (colname, row[i])
-                for i,colname in enumerate(players.columns)
-            ])
-            for row in players.values
-        ]
-
-        jsonData = json.dumps(d, indent=4)
-
-        fileName = './' + name + '_players.json'
-        with open(fileName, 'w') as outputFile:
-            print(jsonData, file=outputFile)
-        
-        print("Finished - " + str(fileNames[i]))
-
-
-
 def readData(team):
     fileName = './' + team + '_players.json'
     with open(fileName, 'r') as myfile:
@@ -93,8 +52,8 @@ def getImage(path):
     return OffsetImage(plt.imread(path), zoom=.05, alpha = 1)
 
 
-
 def generateviz(team="england", per = 5, position = "att", color= "#c2c1c0"):
+    getdata()
     players = readData(team)
     #print(players)
 
@@ -114,8 +73,6 @@ def generateviz(team="england", per = 5, position = "att", color= "#c2c1c0"):
     ax.set_title('NP Expected Goals vs Expected Assists - data by FBref', size=20)
 
     plt.style.use('grayscale')  # to get seaborn scatter plot
-
-    
 
     for x0, y0, path in zip(x, y, paths):
         ab = AnnotationBbox(getImage(path), (x0, y0), frameon=False)
