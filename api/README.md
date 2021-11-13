@@ -3,7 +3,11 @@ Running the API
 
 # Starting the API
 Activate the virtual environment:
+
+In the FootballGraphs/api folder
 python -m venv env
+
+cd backend
 
 Install the required packages:
 pip install -r requirements.txt
