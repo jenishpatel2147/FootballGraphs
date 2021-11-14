@@ -72,7 +72,7 @@ def ScrapTeamPage(url, players, country):
         data = dict({"playerLink": [],
                     "playerName": [],
                     "team": team_name,
-                    "url": github_url})
+                    "logo_url": github_url})
     else:
         looper = table.tfoot.find_all("tr")
         data = dict({"team_type": []})

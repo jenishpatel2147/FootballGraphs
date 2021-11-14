@@ -4,15 +4,12 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from "react-router-dom";
-import { configureStore } from '@reduxjs/toolkit';
 import { Provider } from "react-redux";
 import ScatterReducer from "./features/ScatterReducer.js";
+import { createStore } from 'redux'
 
-const store = configureStore({
-  reducer: {
-    scatterplot: ScatterReducer
-  }
-});
+const store = createStore(ScatterReducer)
+export default store;
 
 ReactDOM.render(
   <BrowserRouter>

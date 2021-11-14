@@ -3,39 +3,31 @@ import { Container, Row, Col } from "react-bootstrap";
 import scatterplot from "../../../services/scatterplot";
 import InnerHTML from 'dangerously-set-html-content'
 import { useSelector, useDispatch } from 'react-redux'
-import { forminput } from '../../../features/ScatterReducer.js'
+import store from '../../../index.js'
 
 const GraphScatterPlot = () => {
 
-    const data = useSelector((state) => state.scatterplot.value);
+    const data = useSelector((state) => state);
 
-    const dispatch = useDispatch();
+    //const dispatch = useDispatch();
         
     useEffect(() => {
         let isMounted = true;     // note mutable flag
-        console.log(data.league);
-        scatterplot.getplot(data.league, data.per90s)
+        console.log(data.league)
+        scatterplot.getplot(data.league, data.per90s, data.xlabel, data.ylabel, data.title, data.read_new, data.x_metric, data.y_metric)
         .then((response) => {
-            console.log(response.data);
             const resdata = response.data
-            dispatch(forminput({
-                league: data.league, per90s: data.per90s,
-                        title: "Title", xlabel: "x label", ylabel: "y label",
-                    current_graph: resdata}, "ALL"));
-            console.log("error");
+            store.dispatch({type: "graph", payload: resdata});
         }).catch((error) => {
             alert(error);
             console.log(error);
         })    
         return () => {isMounted = false};
-    }, [dispatch, data.league]);
+    }, [store.dispatch, data.league, data.per90s, data.xlabel, data.ylabel, data.title, data.read_new, data.x_metric, data.y_metric]);
 
-    const data2 = useSelector((state) => state.scatterplot.value);
+    const data2 = useSelector((state) => state);
 
-    console.log("Getting Values")
-
-    return (<div><InnerHTML html={data2.current_graph} /></div>
-    )
+    return (<div><InnerHTML html={data2.current_graph} /></div>)
 }
 
 export default GraphScatterPlot;

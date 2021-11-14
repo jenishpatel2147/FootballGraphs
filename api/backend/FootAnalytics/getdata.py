@@ -1,12 +1,14 @@
 import pandas as pd
 import matplotlib.pyplot as plt
-from matplotlib.offsetbox import (TextArea, DrawingArea, OffsetImage,
-                                  AnnotationBbox)
+from matplotlib.offsetbox import (TextArea, DrawingArea, OffsetImage, AnnotationBbox)
 import numpy as np
 import os
 import mpld3
+import PIL
+import requests
+from io import BytesIO
 import json
-from webscrapper import getdata
+from .webscrapper import getdata
 os.environ['KMP_DUPLICATE_LIB_OK']='True'
 
 def rendernewdata():
@@ -48,36 +50,48 @@ def readData(team):
 
     return df
 
+
 def getImage(path):
-    return OffsetImage(plt.imread(path), zoom=.05, alpha = 1)
+    path = "https://raw.githubusercontent.com/jenishpatel2147/FootballGraphs/master/logos/england/Chelsea.png"
+    response = requests.get(path)
+    try:
+        img = PIL.Image.open(BytesIO(response.content))
+    except:
+        img = PIL.Image.open(BytesIO(response.content))
 
+    img = "https://raw.githubusercontent.com/jenishpatel2147/FootballGraphs/master/logos/england/Chelsea.png"
+    return OffsetImage(img, zoom=.05, alpha=1)
 
-def generateviz(team="england", per = 5, position = "att", color= "#c2c1c0"):
-    getdata()
-    players = readData(team)
-    #print(players)
+LAST_READ_FILE = ''
 
-    per90sPlayers = per90sdiff(players, per)
+def generateviz(team, per90s, position, xlabel, ylabel, title, read_new, x_metric, y_metric):
+    
+    if read_new:
+        players = readData(team)
+    else:
+        players = LAST_READ_FILE
+
+    per90sPlayers = per90sdiff(players, per90s)
     players = getSpecificPositon(per90sPlayers, position)
 
     fig, ax = plt.subplots()
 
-    x = players['npxg_per90'].to_numpy()
-    y = players['xa_per90'].to_numpy()
+    x = players[x_metric].to_numpy()
+    y = players[y_metric].to_numpy()
     names = players['playerName'].to_numpy()
-    paths = players['path'].to_numpy()
+    # paths = players['url'].to_numpy()               # Change it to logo URL in the future
+    
     scatterplot = ax.scatter(x,y, color='b', alpha=0.6, edgecolor='black')
+
+    # for x0, y0, path in zip(x, y, paths):
+    #    ab = AnnotationBbox(getImage(path), (x0, y0), frameon=False)
+    #    ax.add_artist(ab)
         
-    ax.set_xlabel('NP Expected Goals', size=20)
-    ax.set_ylabel('Expected Assists', size=20)
-    ax.set_title('NP Expected Goals vs Expected Assists - data by FBref', size=20)
+    ax.set_xlabel(xlabel, size=17)
+    ax.set_ylabel(ylabel, size=17)
+    ax.set_title(title, size=17)
 
     plt.style.use('grayscale')  # to get seaborn scatter plot
-
-    for x0, y0, path in zip(x, y, paths):
-        ab = AnnotationBbox(getImage(path), (x0, y0), frameon=False)
-        ax.add_artist(ab)
-
 
     labels = ['{0}'.format(names[i]) for i in range(len(names))]
     tooltip = mpld3.plugins.PointLabelTooltip(scatterplot, labels=labels)
@@ -85,5 +99,8 @@ def generateviz(team="england", per = 5, position = "att", color= "#c2c1c0"):
 
     #jsonfiles = json.dumps(mpld3.fig_to_dict(fig))
     jsonfiles = mpld3.fig_to_html(fig)
+
+
+    LAST_READ_FILE = players
 
     return jsonfiles
