@@ -103,18 +103,18 @@ def generateviz(team, per90s, position, xlabel, ylabel, title, read_new, x_metri
     names = players['playerName'].to_numpy()
     # paths = players['url'].to_numpy()               # Change it to logo URL in the future
     
-    scatterplot = ax.scatter(x,y, color='c', alpha=1.0)
+    scatterplot = ax.scatter(x,y, color='green', alpha=0.7)
 
     # for x0, y0, path in zip(x, y, paths):
     #    ab = AnnotationBbox(getImage(path), (x0, y0), frameon=False)
     #    ax.add_artist(ab)
 
-    ax.set_facecolor('black') 
+    ax.set_facecolor('#121212') 
 
-    color = "#dddddd"
-    ax.set_xlabel(xlabel, size=20, color=color)
-    ax.set_ylabel(ylabel, size=20, color=color)
-    ax.set_title(title, size=17, color=color)
+    color = "#ff8080"
+    ax.set_xlabel(xlabel, size=22, color=color)
+    ax.set_ylabel(ylabel, size=22, color=color)
+    ax.set_title(title, size=25, color=color)
 
     #plt.style.use('grayscale')  # to get seaborn scatter plot
 

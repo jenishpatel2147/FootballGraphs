@@ -18,7 +18,7 @@ const ParticlesLoader = () => {
         options={{
           background: {
             color: {
-              value:"#aaaaaa"//value: "#030303",
+              value: "#121212"
             },
           },
           fpsLimit: 180,

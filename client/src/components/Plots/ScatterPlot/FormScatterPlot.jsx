@@ -1,6 +1,6 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { FormControl, Select, TextField, InputLabel, MenuItem, Stack } from '@mui/material';
+import { FormControl, Select, TextField, InputLabel, MenuItem, Stack, Box } from '@mui/material';
 import store from '../../../index'
 import "./FormScatterPlot.css"
 
@@ -22,14 +22,14 @@ export default function FormScatterPlot() {
   };
 
   const SelectOptionStyles = {
-    backgroundColor: 'white',
+    backgroundColor: '#d3d3d3',
     '& label': {
       color: 'white',
     }
   };
 
   const InputBoxStyles = {
-    backgroundColor: 'white',
+    backgroundColor: '#d3d3d3',
     '& label.Mui-focused': {
       color: 'green',
     },
@@ -48,63 +48,69 @@ export default function FormScatterPlot() {
       },
     },
   };
-
+ 
   return (
   <Stack spacing={2}>
     <h1 style={{ color: 'blue'}}>Customizations</h1>
-    <Stack direction="row" spacing={2}>
-      <InputLabel id="demo-simple-select-autowidth-label">Choose League</InputLabel>
-      <Select
-          labelId="demo-simple-select-autowidth-label"
-          id="demo-simple-select-autowidth-id"
-          name="league"
-          value={data.league}
-          label="Choose League"
-          style={SelectOptionStyles}
-          onChange={handlechange}>
-        <MenuItem value="england">EPL</MenuItem>
-        <MenuItem value="italy">Serie A</MenuItem>
-        <MenuItem value="spain">La Liga</MenuItem>
-        <MenuItem value="germany">Bundesliga</MenuItem>
-        <MenuItem value="france">Ligue 1</MenuItem>
-      </Select>  
-      <InputLabel id="demo-simple-select-autowidth-label-xaxis">Choose League</InputLabel>
-      <Select
-          labelId="demo-simple-select-autowidth-label-xaxis"
-          id="demo-simple-select-autowidth-id"
-          name="x_metric"
-          value={data.x_metric}
-          label="X metric"
-          style={SelectOptionStyles}
-          onChange={handlechange}>
-        <MenuItem value="goals">Goals</MenuItem>
-        <MenuItem value="assists">Assists</MenuItem>
-        <MenuItem value="npxg">NPXG</MenuItem>
-        <MenuItem value="xg_per90">XG_per90</MenuItem>
-        <MenuItem value="xa_per90">XA_per90</MenuItem>
-        <MenuItem value="xg_xa_per90">XG_XA_per90</MenuItem>
-        <MenuItem value="npxg_per90">NPXG_per90</MenuItem>
-        <MenuItem value="npxg_xa_per90">NPXG_XA_per90</MenuItem>
-      </Select>
-      <InputLabel id="demo-simple-select-autowidth-label-yaxis">Choose League</InputLabel>
-      <Select
-          labelId="demo-simple-select-autowidth-label-yaxis"
-          id="demo-simple-select-autowidth-id"
-          name="y_metric"
-          value={data.y_metric}
-          style={SelectOptionStyles}
-          label="Y metric"
-          onChange={handlechange}>
-        <MenuItem value="goals">Goals</MenuItem>
-        <MenuItem value="assists">Assists</MenuItem>
-        <MenuItem value="npxg">NPXG</MenuItem>
-        <MenuItem value="xg_per90">XG_per90</MenuItem>
-        <MenuItem value="xa_per90">XA_per90</MenuItem>
-        <MenuItem value="xg_xa_per90">XG_XA_per90</MenuItem>
-        <MenuItem value="npxg_per90">NPXG_per90</MenuItem>
-        <MenuItem value="npxg_xa_per90">NPXG_XA_per90</MenuItem>
-      </Select>
-    </Stack>    
+    <Box sx={{ display: 'flex', justifyContent: 'space-between', p: 1, m: 1, bgcolor: 'background.paper'}}>
+      <FormControl>
+        <InputLabel id="demo-simple-select-autowidth-label">League</InputLabel>
+        <Select
+            labelId="demo-simple-select-autowidth-label"
+            id="demo-simple-select-autowidth-id"
+            name="league"
+            value={data.league}
+            label="Choose League"
+            style={SelectOptionStyles}
+            onChange={handlechange}>
+          <MenuItem value="england">EPL</MenuItem>
+          <MenuItem value="italy">Serie A</MenuItem>
+          <MenuItem value="spain">La Liga</MenuItem>
+          <MenuItem value="germany">Bundesliga</MenuItem>
+          <MenuItem value="france">Ligue 1</MenuItem>
+        </Select>
+      </FormControl>
+      <FormControl>
+        <InputLabel id="demo-simple-select-autowidth-label-xaxis">X-axis</InputLabel>
+        <Select
+            labelId="demo-simple-select-autowidth-label-xaxis"
+            id="demo-simple-select-autowidth-id"
+            name="x_metric"
+            value={data.x_metric}
+            label="X metric"
+            style={SelectOptionStyles}
+            onChange={handlechange}>
+          <MenuItem value="goals">Goals</MenuItem>
+          <MenuItem value="assists">Assists</MenuItem>
+          <MenuItem value="npxg">NPXG</MenuItem>
+          <MenuItem value="xg_per90">XG_per90</MenuItem>
+          <MenuItem value="xa_per90">XA_per90</MenuItem>
+          <MenuItem value="xg_xa_per90">XG_XA_per90</MenuItem>
+          <MenuItem value="npxg_per90">NPXG_per90</MenuItem>
+          <MenuItem value="npxg_xa_per90">NPXG_XA_per90</MenuItem>
+        </Select>
+      </FormControl>
+      <FormControl>
+        <InputLabel id="demo-simple-select-autowidth-label-yaxis">Y-axis</InputLabel>
+        <Select
+            labelId="demo-simple-select-autowidth-label-yaxis"
+            id="demo-simple-select-autowidth-id"
+            name="y_metric"
+            value={data.y_metric}
+            style={SelectOptionStyles}
+            label="Y metric"
+            onChange={handlechange}>
+          <MenuItem value="goals">Goals</MenuItem>
+          <MenuItem value="assists">Assists</MenuItem>
+          <MenuItem value="npxg">NPXG</MenuItem>
+          <MenuItem value="xg_per90">XG_per90</MenuItem>
+          <MenuItem value="xa_per90">XA_per90</MenuItem>
+          <MenuItem value="xg_xa_per90">XG_XA_per90</MenuItem>
+          <MenuItem value="npxg_per90">NPXG_per90</MenuItem>
+          <MenuItem value="npxg_xa_per90">NPXG_XA_per90</MenuItem>
+        </Select>
+      </FormControl>
+    </Box>    
     <Stack spacing={2}>
       <TextField label="Title" variant="filled"  name="title" value={data.title} onChange={handlechange} style={InputBoxStyles} />
       <TextField label="X-axis" variant="filled" name="xlabel" value={data.xlabel} onChange={handlechange} style={InputBoxStyles}/>

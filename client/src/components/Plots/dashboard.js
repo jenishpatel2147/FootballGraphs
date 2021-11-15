@@ -15,14 +15,14 @@ export default class Dashboard extends React.Component {
     render() {
         return (
         <Container fluid>
-                Hi, I'm some kid trying to learn to code
-                <h1>SOME MAGIC SHIT</h1>
             <ParticlesLoader />
-            <Grid container spacing={2}>
-                <Grid item xs={6} md={8}>
+            Hi, I'm some kid trying to learn to code
+            <h1>SOME MAGIC SHIT</h1>
+            <Grid container spacing={16}>
+                <Grid item xs={6} md={6} backgroundColor={{color: "white"}}>
                     <GraphScatterPlot />
                 </Grid>
-                <Grid item xs={6} md={4}>
+                <Grid item xs={6} md={6}>
                     <FormScatterPlot />
                 </Grid>
             </Grid>
