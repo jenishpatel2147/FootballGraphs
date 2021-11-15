@@ -11,6 +11,28 @@ import json
 from .webscrapper import getdata
 os.environ['KMP_DUPLICATE_LIB_OK']='True'
 
+css = """
+table
+{
+  border-collapse: collapse;
+}
+th
+{
+  color: #ffffff;
+  background-color: #000000;
+}
+td
+{
+  background-color: #cccccc;
+}
+table, th, td
+{
+  font-family:Arial, Helvetica, sans-serif;
+  border: 1px solid black;
+  text-align: right;
+}
+"""
+
 def rendernewdata():
     getdata()
     return "NEW DATA UPLODATED -- CHECK LOGS TO CONFIRM"
@@ -81,20 +103,23 @@ def generateviz(team, per90s, position, xlabel, ylabel, title, read_new, x_metri
     names = players['playerName'].to_numpy()
     # paths = players['url'].to_numpy()               # Change it to logo URL in the future
     
-    scatterplot = ax.scatter(x,y, color='b', alpha=0.6, edgecolor='black')
+    scatterplot = ax.scatter(x,y, color='c', alpha=1.0)
 
     # for x0, y0, path in zip(x, y, paths):
     #    ab = AnnotationBbox(getImage(path), (x0, y0), frameon=False)
     #    ax.add_artist(ab)
-        
-    ax.set_xlabel(xlabel, size=17)
-    ax.set_ylabel(ylabel, size=17)
-    ax.set_title(title, size=17)
 
-    plt.style.use('grayscale')  # to get seaborn scatter plot
+    ax.set_facecolor('black') 
+
+    color = "#dddddd"
+    ax.set_xlabel(xlabel, size=20, color=color)
+    ax.set_ylabel(ylabel, size=20, color=color)
+    ax.set_title(title, size=17, color=color)
+
+    #plt.style.use('grayscale')  # to get seaborn scatter plot
 
     labels = ['{0}'.format(names[i]) for i in range(len(names))]
-    tooltip = mpld3.plugins.PointLabelTooltip(scatterplot, labels=labels)
+    tooltip = mpld3.plugins.PointHTMLTooltip(scatterplot, labels=labels, css=css)
     mpld3.plugins.connect(fig, tooltip)
 
     #jsonfiles = json.dumps(mpld3.fig_to_dict(fig))

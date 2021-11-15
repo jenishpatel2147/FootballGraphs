@@ -1,6 +1,6 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { FormControl, Select, TextField, InputLabel, MenuItem } from '@mui/material';
+import { FormControl, Select, TextField, InputLabel, MenuItem, Stack } from '@mui/material';
 import store from '../../../index'
 import "./FormScatterPlot.css"
 
@@ -21,8 +21,38 @@ export default function FormScatterPlot() {
     }
   };
 
+  const SelectOptionStyles = {
+    backgroundColor: 'white',
+    '& label': {
+      color: 'white',
+    }
+  };
+
+  const InputBoxStyles = {
+    backgroundColor: 'white',
+    '& label.Mui-focused': {
+      color: 'green',
+    },
+    '& .MuiInput-underline:after': {
+      borderBottomColor: 'white',
+    },
+    '& .MuiOutlinedInput-root': {
+      '& fieldset': {
+        borderColor: 'white',
+      },
+      '&:hover fieldset': {
+        borderColor: 'lightgreen',
+      },
+      '&.Mui-focused fieldset': {
+        borderColor: 'green',
+      },
+    },
+  };
+
   return (
-    <FormControl class="new">
+  <Stack spacing={2}>
+    <h1 style={{ color: 'blue'}}>Customizations</h1>
+    <Stack direction="row" spacing={2}>
       <InputLabel id="demo-simple-select-autowidth-label">Choose League</InputLabel>
       <Select
           labelId="demo-simple-select-autowidth-label"
@@ -30,23 +60,22 @@ export default function FormScatterPlot() {
           name="league"
           value={data.league}
           label="Choose League"
+          style={SelectOptionStyles}
           onChange={handlechange}>
         <MenuItem value="england">EPL</MenuItem>
         <MenuItem value="italy">Serie A</MenuItem>
         <MenuItem value="spain">La Liga</MenuItem>
         <MenuItem value="germany">Bundesliga</MenuItem>
         <MenuItem value="france">Ligue 1</MenuItem>
-      </Select>
-      <TextField id="outlined-basic" name="title" label="Title" variant="outlined" onChange={handlechange}/>
-      <TextField id="outlined-basic" name="xlabel" label="X-axis" variant="outlined" onChange={handlechange}/>
-      <TextField id="outlined-basic" name="ylabel" label="Y-axis" variant="outlined" onChange={handlechange}/>
-      <InputLabel id="demo-simple-select-autowidth-label">Choose League</InputLabel>
+      </Select>  
+      <InputLabel id="demo-simple-select-autowidth-label-xaxis">Choose League</InputLabel>
       <Select
-          labelId="demo-simple-select-autowidth-label"
+          labelId="demo-simple-select-autowidth-label-xaxis"
           id="demo-simple-select-autowidth-id"
           name="x_metric"
           value={data.x_metric}
           label="X metric"
+          style={SelectOptionStyles}
           onChange={handlechange}>
         <MenuItem value="goals">Goals</MenuItem>
         <MenuItem value="assists">Assists</MenuItem>
@@ -57,11 +86,13 @@ export default function FormScatterPlot() {
         <MenuItem value="npxg_per90">NPXG_per90</MenuItem>
         <MenuItem value="npxg_xa_per90">NPXG_XA_per90</MenuItem>
       </Select>
+      <InputLabel id="demo-simple-select-autowidth-label-yaxis">Choose League</InputLabel>
       <Select
-          labelId="demo-simple-select-autowidth-label"
+          labelId="demo-simple-select-autowidth-label-yaxis"
           id="demo-simple-select-autowidth-id"
           name="y_metric"
           value={data.y_metric}
+          style={SelectOptionStyles}
           label="Y metric"
           onChange={handlechange}>
         <MenuItem value="goals">Goals</MenuItem>
@@ -73,8 +104,13 @@ export default function FormScatterPlot() {
         <MenuItem value="npxg_per90">NPXG_per90</MenuItem>
         <MenuItem value="npxg_xa_per90">NPXG_XA_per90</MenuItem>
       </Select>
-    </FormControl>
-
+    </Stack>    
+    <Stack spacing={2}>
+      <TextField label="Title" variant="filled"  name="title" value={data.title} onChange={handlechange} style={InputBoxStyles} />
+      <TextField label="X-axis" variant="filled" name="xlabel" value={data.xlabel} onChange={handlechange} style={InputBoxStyles}/>
+      <TextField label="Y-axis" variant="filled" name="ylabel" value={data.ylabel} onChange={handlechange} style={InputBoxStyles} />
+    </Stack>
+  </Stack>
   );
 }
 

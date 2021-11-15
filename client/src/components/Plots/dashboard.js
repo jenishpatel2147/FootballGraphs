@@ -1,8 +1,10 @@
 import React from 'react'
 //import Header from "../Header/Header";
-import { Container, Row, Col } from "react-bootstrap";
 import FormScatterPlot from './ScatterPlot/FormScatterPlot'
 import GraphScatterPlot from "./ScatterPlot/GraphScatterPlot";
+import ParticlesLoader from './Particles';
+import { Grid, Container } from '@mui/material';
+
 
 export default class Dashboard extends React.Component {
     // eslint-disable-next-line no-useless-constructor
@@ -12,20 +14,19 @@ export default class Dashboard extends React.Component {
 
     render() {
         return (
-            <Container fluid>
-            <Row>
+        <Container fluid>
                 Hi, I'm some kid trying to learn to code
                 <h1>SOME MAGIC SHIT</h1>
-            </Row>
-            <Row> 
-                <Col>
+            <ParticlesLoader />
+            <Grid container spacing={2}>
+                <Grid item xs={6} md={8}>
                     <GraphScatterPlot />
-                </Col>
-                <Col>
+                </Grid>
+                <Grid item xs={6} md={4}>
                     <FormScatterPlot />
-                </Col>    
-            </Row>       
-            </Container>
+                </Grid>
+            </Grid>
+        </Container>
         )
     }
 }
