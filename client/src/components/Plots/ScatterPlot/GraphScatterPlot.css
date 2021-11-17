@@ -1,0 +1,28 @@
+.new {
+    padding: 20px;
+}
+.mpld3-yaxis text, .mpld3-xaxis text 
+{
+    font-family:sans-serif !important; 
+    font-size: 14px !important; 
+    fill:pink !important; 
+    stroke:none; 
+}
+.mpld3-yaxis line,  .mpld3-yaxis path, .mpld3-xaxis line, .mpld3-xaxis path { 
+    shape-rendering:crispEdges !important; 
+    stroke:pink !important; 
+    padding: 2px !important; 
+    fill:none !important; 
+}
+
+.mpld3-paths g path {
+        stroke: rgba(245, 241, 241, 0.8) !important;
+        stroke-width: 1;
+        stroke-opacity: 0.8;
+        fill: rgba(250, 157, 157, 0.8) !important;
+        fill-opacity: 0.8;
+}
+
+.mpld3-text {
+    fill: pink !important;
+}

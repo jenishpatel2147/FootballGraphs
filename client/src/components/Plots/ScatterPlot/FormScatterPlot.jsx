@@ -1,8 +1,8 @@
-import React from 'react'
+import React, {useState} from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { FormControl, Select, TextField, InputLabel, MenuItem, Stack, Box } from '@mui/material';
 import store from '../../../index'
-import "./FormScatterPlot.css"
+import { HexColorPicker } from "react-colorful";
 
 export default function FormScatterPlot() {
   
@@ -21,17 +21,24 @@ export default function FormScatterPlot() {
     }
   };
 
+
   const SelectOptionStyles = {
     backgroundColor: '#d3d3d3',
-    '& label': {
-      color: 'white',
-    }
+  };
+  const LabelOptionStyles = {
+    color: '#da4257',
+    'font-size': '17px',
+    'font-family': 'arial', 
+    'font-weight': 'bold',
   };
 
   const InputBoxStyles = {
     backgroundColor: '#d3d3d3',
+    '.MuiInputLabel-root': {
+      color: '#da4257 !important',
+    },
     '& label.Mui-focused': {
-      color: 'green',
+      color: 'white',
     },
     '& .MuiInput-underline:after': {
       borderBottomColor: 'white',
@@ -48,21 +55,25 @@ export default function FormScatterPlot() {
       },
     },
   };
+
+/*
+Implement FlexBox for Color Palatte 
+*/
  
   return (
   <Stack spacing={2}>
-    <h1 style={{ color: 'blue'}}>Customizations</h1>
-    <Box sx={{ display: 'flex', justifyContent: 'space-between', p: 1, m: 1, bgcolor: 'background.paper'}}>
-      <FormControl>
-        <InputLabel id="demo-simple-select-autowidth-label">League</InputLabel>
+    <h1 style={{ color: 'pink'}}>Customizations</h1>
+    <Box sx={{ display: 'flex', justifyContent: 'space-evenly', p: 1, m: 1, bgcolor: 'background.paper'}}>
+    <FormControl variant="filled" sx={{ m: 1, minWidth: 120 }}>
+        <InputLabel id="demo-simple-select-filled-label" style={LabelOptionStyles}>League</InputLabel>
         <Select
-            labelId="demo-simple-select-autowidth-label"
-            id="demo-simple-select-autowidth-id"
-            name="league"
-            value={data.league}
-            label="Choose League"
-            style={SelectOptionStyles}
-            onChange={handlechange}>
+          labelId="demo-simple-select-filled-label"
+          id="demo-simple-select-filled"
+          name="league"
+          value={data.league}
+          label="Choose League"
+          style={SelectOptionStyles}
+          onChange={handlechange}>
           <MenuItem value="england">EPL</MenuItem>
           <MenuItem value="italy">Serie A</MenuItem>
           <MenuItem value="spain">La Liga</MenuItem>
@@ -70,11 +81,11 @@ export default function FormScatterPlot() {
           <MenuItem value="france">Ligue 1</MenuItem>
         </Select>
       </FormControl>
-      <FormControl>
-        <InputLabel id="demo-simple-select-autowidth-label-xaxis">X-axis</InputLabel>
-        <Select
-            labelId="demo-simple-select-autowidth-label-xaxis"
-            id="demo-simple-select-autowidth-id"
+      <FormControl variant="filled" sx={{ m: 1, minWidth: 120 }}>
+        <InputLabel id="demo-simple-select-filled-label-x-axis" style={LabelOptionStyles}>X-axis</InputLabel>
+          <Select
+            labelId="demo-simple-select-filled-label-x-axis"
+            id="demo-simple-select-filled"
             name="x_metric"
             value={data.x_metric}
             label="X metric"
@@ -90,11 +101,11 @@ export default function FormScatterPlot() {
           <MenuItem value="npxg_xa_per90">NPXG_XA_per90</MenuItem>
         </Select>
       </FormControl>
-      <FormControl>
-        <InputLabel id="demo-simple-select-autowidth-label-yaxis">Y-axis</InputLabel>
-        <Select
-            labelId="demo-simple-select-autowidth-label-yaxis"
-            id="demo-simple-select-autowidth-id"
+      <FormControl variant="filled" sx={{ m: 1, minWidth: 120 }}>
+      <InputLabel id="demo-simple-select-filled-label-y-axis" style={LabelOptionStyles}>Y-axis</InputLabel>
+          <Select
+            labelId="demo-simple-select-filled-label-y-axis"
+            id="demo-simple-select-filled"
             name="y_metric"
             value={data.y_metric}
             style={SelectOptionStyles}
@@ -116,6 +127,10 @@ export default function FormScatterPlot() {
       <TextField label="X-axis" variant="filled" name="xlabel" value={data.xlabel} onChange={handlechange} style={InputBoxStyles}/>
       <TextField label="Y-axis" variant="filled" name="ylabel" value={data.ylabel} onChange={handlechange} style={InputBoxStyles} />
     </Stack>
+    <Box sx={{display: 'flex', justifyContent: 'space-evenly', p: 1, m: 1, bgcolor: 'background.paper',}}>
+      
+
+    </Box>
   </Stack>
   );
 }
