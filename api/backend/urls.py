@@ -15,10 +15,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from FootAnalytics.views import footy
+from FootAnalytics.views import footy, refresh
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', footy),
+    path('refresh/', refresh),
 
 ]

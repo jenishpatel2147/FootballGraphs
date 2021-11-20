@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-k01t45tkv3wgei$u-ww_b4cv^ld0nrxt0(npdu6i29k5(_1wuv
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['https://livegrapher.herokuapp.com','http://localhost:3000','http://localhost:8000']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -56,9 +56,8 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware'
 ]
 
-CORS_ORIGIN_WHITELIST = [
-     'http://localhost:3000'
-]
+CORS_ORIGIN_ALLOW_ALL = True
+#CORS_ORIGIN_WHITELIST = [    'http://localhost:3000']
 
 ROOT_URLCONF = 'backend.urls'
 
