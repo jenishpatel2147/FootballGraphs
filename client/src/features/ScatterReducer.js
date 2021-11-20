@@ -1,15 +1,28 @@
 import { combineReducers } from 'redux'
 
-const initialStates = {league: "england", per90s: 5,
-title: "Title", xlabel: "x label", ylabel: "y label",
-current_graph: {}, read_new: true, 
-x_metric : "npxg", y_metric: "xa_per90"}
+const initialStates = {league: "england", per90s: 5, position:"att",
+title: "Graph Creator", xlabel: "Goals Per 90", ylabel: "Assits Per 90",
+current_graph: {}, read_new: true, x_metric : "goals_per90", y_metric: "assists_per90", display_names : false} 
+
+/*
+    base : https://fbref.com/
+    playerLink: /en/players/507c7bdf/Bruno-Fernandes,
+https://fbref.com/en/players/507c7bdf/ + add "scout/11222/" + "Bruno-Fernandes" "-Scouting-Report"
+
+*/
 
 export default function ScatterReducer(state= initialStates, action) {
     console.log(action.type)
+    state = {...state, read_new: false}
     switch (action.type) {
         case "graph":
             return state = {...state, current_graph: action.payload};
+        case "per90s":
+            return state = {...state, per90s: action.payload};
+        case "display_names":
+            return state = {...state, display_names: action.payload};
+        case "position":
+            return state = {...state, position:action.payload};
         case "title":
             return state = {...state, title: action.payload};
         case "xlabel":
