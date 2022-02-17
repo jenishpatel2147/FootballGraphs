@@ -1,11 +1,10 @@
 import axios from "axios";
 
-const api =  "https://livegrapherapi.herokuapp.com/";
-//const api = "http://localhost:8000/"
+//const api =  "https://livegrapherapi.herokuapp.com/";
+const api = "http://localhost:8000/"
 
 class scatterplot {
     getplot(league, per90stat, position, xlabel, ylabel, title, read_new, x_metric, y_metric, display_names) {
-    console.log('Sending Request');
     const res = axios.get(api + 'api/', 
         { params: {
             league: league,

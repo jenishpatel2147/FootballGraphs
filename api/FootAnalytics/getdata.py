@@ -1,12 +1,13 @@
+from types import MemberDescriptorType
 import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.offsetbox import (TextArea, DrawingArea, OffsetImage, AnnotationBbox)
+from pandas.core import api
 import numpy as np
 import os
 import mpld3
-import PIL
-import requests
-from io import BytesIO
+import mplcursors
+import io
 import json
 from .webscrapper import extractdata
 os.environ['KMP_DUPLICATE_LIB_OK']='True'
@@ -54,8 +55,8 @@ def getSpecificPositon(df, pos): #FW,AM,RW,LW
     return filtered_df
 
 
-def readData(team):
-    fileName = './' + team + '_allplayers.json'
+def readData(country):
+    fileName = './' + country + '_allplayers.json'
     with open(fileName, 'r') as myfile:
         data=myfile.read()
 
@@ -68,31 +69,40 @@ def readData(team):
     return df
 
 
-def getImage(path):
-    print(path)
-    return OffsetImage(plt.imread(path), zoom=.05, alpha=1)
+def getImage(team, country):
+    try:
+        path = './logos/' + country + '/' + team.replace('-', ' ') + '.png'
+        data = OffsetImage(plt.imread(path), zoom=.09, alpha=1)
+    except:
+        path = './logos/' + country + '/' + team.replace('-', ' ') + '.png'
+        print(path)
+        path = './logos/england/Everton.png'
+        data = OffsetImage(plt.imread(path), zoom=.09, alpha=1)
 
-def generateviz(team, per90s, position, xlabel, ylabel, title, read_new, x_metric, y_metric, display_names, get_icons=False):
+    return data
+
+
+def generateviz(country, per90s, position, xlabel, ylabel, title, read_new, x_metric, y_metric, display_logos, get_icons=False):
     # print(read_new)
     # implement read_new correctly
-    print(display_names)
     read_new = True
     if read_new:
-        players = readData(team)
+        players = readData(country)
     else:
         players = last_read_players
 
     per90sPlayers = per90sdiff(players, per90s)
     players = getSpecificPositon(per90sPlayers, position)
 
+
+    plt.figure(facecolor='yellow')
     plt.figure(linewidth=5)
 
     fig, ax = plt.subplots()
 
     # Before
-    xbefore = players[x_metric].to_numpy()
-    ybefore = players[y_metric].to_numpy()
-    #print(xbefore)
+    # xbefore = players[x_metric].to_numpy()
+    # ybefore = players[y_metric].to_numpy()
 
     # Extract X and Y columns from data and converting it to a list in numpy
     x = players[x_metric].to_numpy()
@@ -105,45 +115,106 @@ def generateviz(team, per90s, position, xlabel, ylabel, title, read_new, x_metri
 
     names = players['playerName'].to_numpy()
 
-    # paths = players['logo_url'].to_numpy()               # Change it to logo URL in the future
-
-    path = '../../logos/england/Arsenal.png'
-    
+    # Used to Get Logo Path
+    teams = players['team'].to_numpy()
+         
     labelcolor = "#ff8080"
     facecolor  = "#121212"
     pointcolor = "#ff8080"
 
-    scatterplot = ax.scatter(x,y, color=pointcolor, alpha=0.8)
+    # OLD
+    # scatterplot = ax.scatter(x,y, color=pointcolor, alpha=0.8)
+
+    if display_logos is True:
+        alpha = 0
+    else:
+        alpha = 0.7
+
+    scatter = ax.scatter(x,y, color=pointcolor, alpha=alpha)
 
     ax.set_facecolor(facecolor) 
-    ax.set_xlabel(xlabel, size=22, color=labelcolor)
-    ax.set_ylabel(ylabel, size=22, color=labelcolor)
-    ax.set_title(title, size=25, color=labelcolor)
 
-
-    if get_icons is True:
-        for x0, y0, path in zip(x, y, paths):
-            ab = AnnotationBbox(OffsetImage(plt.imread(path)), (x0, y0), frameon=False)
-            print(ab)
+    if display_logos is True:
+        for x0, y0, team in zip(x, y, teams):
+            ab = AnnotationBbox(getImage(team, country), (x0, y0), frameon=False)
             ax.add_artist(ab)
+
+    ax.spines['bottom'].set_color('#dddddd')
+    ax.spines['left'].set_color('#dddddd')
+    ax.spines['right'].set_visible(False)
+    ax.spines['top'].set_visible(False)
+    ax.tick_params(axis='x', colors='green')
+    ax.tick_params(axis='y', colors='green')
+
+
+
+    # CHANGE THIS IS get_icons is True afterwards
    
-    if display_names is True:
+    if False:
         for i, txt in enumerate(names):
-            ax.annotate(txt, (x[i], y[i]))
+            ax.annotate(txt, (x[i], y[i]), color="white", xy=(0,0), xytext=(20,20), arrowprops=dict(arrowstyle="->"))
     
+
+    mplcursors.cursor(scatter, hover=True)
+
+    """
+    Temporay Hold due to 
+
     labels = ['{0}'.format(names[i]) for i in range(len(names))]
     tooltip = mpld3.plugins.PointHTMLTooltip(scatterplot, labels=labels, css=css)
     mpld3.plugins.connect(fig, tooltip)
-
-    #jsonfiles = json.dumps(mpld3.fig_to_dict(fig))
-
+    
     if False == True:
         # Removing All Interactivity from the graph
         mpld3.plugins.clear(fig)  # clear all plugins from the figure
     
     jsonfiles = mpld3.fig_to_html(fig)
+    """ 
 
-    last_read_players = players
-    print
+    print("Graph Created Successfull")
 
-    return jsonfiles
+    imgdata = io.StringIO()
+
+    # Setting Figure Size 
+    size = "else"
+
+    # Change Axis numbers size 
+    # Change Alpha/Point size 
+
+    if size == "small":
+        set_size = (5,2)
+        set_axis = 5
+        set_pad = 7
+        set_title = 7
+    elif size == "semi-medium":
+        set_size = (7,3)
+        set_axis = 5
+        set_pad = 10
+        set_title = 7
+    elif size == "medium":
+        set_size = (9,4)
+        set_axis = 5
+        set_pad = 10
+        set_title = 7
+    else:   # large
+        set_size = (14,6)
+        set_axis = 14
+        set_pad = 10
+        set_title = 20
+
+    ax.set_xlabel(xlabel, size=set_axis, color=labelcolor, labelpad=set_pad)
+    ax.set_ylabel(ylabel, size=set_axis, color=labelcolor, labelpad=set_pad)
+    ax.set_title(title, size=set_title, color=labelcolor, pad=set_pad, loc='left')
+    plt.gcf().set_size_inches(set_size)
+
+    plt.savefig(imgdata, dpi=1600, format='svg', transparent=True)
+
+    f = open("figure.svg", "a")
+    f.write(imgdata.getvalue())
+    f.close()
+    
+    # Figure Out a way to not load and reload a svg file, would save time conseumption and logistics
+
+    # last_read_players = players
+    
+    return imgdata.getvalue()

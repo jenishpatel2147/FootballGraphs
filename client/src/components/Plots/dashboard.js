@@ -3,7 +3,8 @@ import React from 'react'
 import FormScatterPlot from './ScatterPlot/FormScatterPlot'
 import GraphScatterPlot from "./ScatterPlot/GraphScatterPlot";
 import ParticlesLoader from './Particles';
-import { Grid, Container } from '@mui/material';
+import { Container, Grid } from '@mui/material';
+import "./Dashboard.css"
 
 
 export default class Dashboard extends React.Component {
@@ -14,10 +15,10 @@ export default class Dashboard extends React.Component {
 
     render() {
         return (
-        <Container fluid>
+        <Container>
             <ParticlesLoader />
-            Hi, I'm some kid trying to learn to code
-            <h1>SOME MAGIC SHIT</h1>
+            <h1>Graph Generator</h1>
+            Hi, I'm a student creating grapsh for stuff that I don't understand.
             <Grid container spacing={16}>
                 <Grid item xs={6} md={6} backgroundColor={{color: "white"}}>
                     <GraphScatterPlot />

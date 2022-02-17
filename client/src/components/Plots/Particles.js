@@ -1,4 +1,5 @@
 import Particles from "react-tsparticles";
+import "./Particles.css"
 
 const ParticlesLoader = () => {
     const particlesInit = (main) => {
@@ -11,6 +12,7 @@ const ParticlesLoader = () => {
       console.log(container);
     };
     return (
+      <div id="particles">
       <Particles
         id="tsparticles"
         init={particlesInit}
@@ -92,7 +94,7 @@ const ParticlesLoader = () => {
           },
           detectRetina: true,
         }}
-      />
+      /></div>
     );
 };
 

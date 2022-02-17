@@ -2,7 +2,8 @@ import { combineReducers } from 'redux'
 
 const initialStates = {league: "england", per90s: 5, position:"att",
 title: "Graph Creator", xlabel: "Goals Per 90", ylabel: "Assits Per 90",
-current_graph: {}, read_new: true, x_metric : "goals_per90", y_metric: "assists_per90", display_names : false} 
+current_graph: {}, read_new: true, x_metric : "goals_per90", y_metric: "assists_per90", display_names : false,
+submit: true} 
 
 /*
     base : https://fbref.com/
@@ -37,6 +38,8 @@ export default function ScatterReducer(state= initialStates, action) {
             return state = {...state, league: action.payload};
         case "league_and_read_new":
             return state = {...state, league: action.payload, read_new: true};
+        case "submit":
+            return state = {...state, submit: action.payload}
         default:
             return state;
     }
